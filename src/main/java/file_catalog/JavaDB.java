@@ -22,8 +22,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JavaDB {
 
@@ -38,9 +36,9 @@ public class JavaDB {
             ex.printStackTrace();
         }
     }
-    
-    private void createTable(Connection connection) throws SQLException{
-       if (!tableExists(connection)) {
+
+    private void createTable(Connection connection) throws SQLException {
+        if (!tableExists(connection)) {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(
                     "create table " + TABLE_NAME + " (filename varchar(32) primary key, owner varchar(32), permission varchar(32), readwrite varchar(32))");
