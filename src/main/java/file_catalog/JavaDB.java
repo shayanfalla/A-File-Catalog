@@ -19,6 +19,7 @@ package file_catalog;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,6 +33,7 @@ public class JavaDB {
             Class.forName("org.apache.derby.jdbc.ClientXADataSource");
             Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527//File-Catalog", "file", "file");
             createTable(connection);
+            
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }

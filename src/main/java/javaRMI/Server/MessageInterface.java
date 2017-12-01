@@ -9,6 +9,8 @@ package javaRMI.Server;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface Hello extends Remote{
+public interface MessageInterface extends Remote{
     public String sayHello() throws RemoteException;
+    
+    public String credentials(String username, String password) throws RemoteException;
 }

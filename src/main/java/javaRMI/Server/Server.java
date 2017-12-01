@@ -10,7 +10,9 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Server extends UnicastRemoteObject implements Hello {
+public class Server extends UnicastRemoteObject implements MessageInterface {
+    
+    private static Database DB;
 
     public Server() throws RemoteException {
         super();
@@ -18,10 +20,19 @@ public class Server extends UnicastRemoteObject implements Hello {
 
     @Override
     public String sayHello() {
-        return "Hello, world!";
+        return "Welcome!";
     }
 
-    public static void main(String args[]) {
+    @Override
+    public String credentials(String username, String password) {
+        if(DB.checkUser(username)){
+            return "You already exist";
+        } else DB.insertUser(username, password);
+        return "You have been added";
+    }
+
+    public static void main(String args[]) throws RemoteException {
+         DB = new Database();
         try {
             //Bind the remote object to the registry
             LocateRegistry.createRegistry(1099);
