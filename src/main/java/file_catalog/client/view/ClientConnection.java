@@ -111,7 +111,7 @@ public class ClientConnection {
         ArrayList<String[]> temp = stub.list();
         for (int i = 0; i < temp.size(); i++) {
             String[] list = temp.get(i);
-            System.out.printf("FILE: %-20sOWNER:%-20sPUBLIC/PRIVATE: %-20sREAD/WRITE: %s", list[0], list[1], list[2], list[3]);
+            System.out.printf("FILE: %-20sOWNER:%-20sPERMISSIONS: %-20sREAD/WRITE: %s", list[0], list[1], list[2], list[3]);
             System.out.println();
         }
     }

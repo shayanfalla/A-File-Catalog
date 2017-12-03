@@ -17,8 +17,6 @@
 package file_catalog.client.startup;
 
 import file_catalog.client.view.ClientConnection;
-import file_catalog.client.view.ClientConnection;
-import file_catalog.client.view.ClientConnection;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
