@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package javaRMI.Server;
+package file_catalog.server.model;
 
+import file_catalog.server.integration.Database;
+import file_catalog.common.ServerInterface;
+import file_catalog.common.ClientInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;

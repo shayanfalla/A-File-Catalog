@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package javaRMI.Server;
+package file_catalog.client.startup;
 
+import file_catalog.client.view.ClientConnection;
+import file_catalog.client.view.ClientConnection;
+import file_catalog.client.view.ClientConnection;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 

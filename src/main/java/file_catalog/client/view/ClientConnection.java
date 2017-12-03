@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package javaRMI.Server;
+package file_catalog.client.view;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,6 +23,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Scanner;
+import file_catalog.common.ClientInterface;
+import file_catalog.common.ServerInterface;
 
 public class ClientConnection {
 

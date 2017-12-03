@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package javaRMI.Server;
+package file_catalog.common;
 
+import file_catalog.common.ClientInterface;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;

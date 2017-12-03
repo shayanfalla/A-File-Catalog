@@ -14,16 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package javaRMI.Server;
+package file_catalog.server.startup;
 
-import java.rmi.Remote;
+import file_catalog.server.model.ClientHandler;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
-/**
- *
- * @author Shayan Fallahian, shayanf@kth.se
- */
-public interface ClientInterface extends Remote {
-    
-    public void recvMsg(String msg) throws RemoteException;
+public class Server {
+
+    public static void main(String args[]) throws RemoteException {
+        try {
+            //Bind the remote object to the registry
+            LocateRegistry.createRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry();
+            registry.rebind("HelloServer", new ClientHandler());
+            System.err.println("Server ready");
+        } catch (Exception e) {
+            System.err.println("Server exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+
 }
