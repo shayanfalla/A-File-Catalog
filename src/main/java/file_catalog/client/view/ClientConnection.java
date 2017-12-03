@@ -61,6 +61,7 @@ public class ClientConnection {
                         {
                             System.out.println("Shutting down...");
                             stub.removeClient(ci);
+                            System.exit(0);
                         }
                     case "list": {
                         listFiles(stub);

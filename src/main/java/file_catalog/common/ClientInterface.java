@@ -19,10 +19,6 @@ package file_catalog.common;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-/**
- *
- * @author Shayan Fallahian, shayanf@kth.se
- */
 public interface ClientInterface extends Remote {
     
     public void recvMsg(String msg) throws RemoteException;
