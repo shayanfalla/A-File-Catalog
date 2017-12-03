@@ -31,4 +31,6 @@ public interface MessageInterface extends Remote{
     public boolean insertFile(String filename, String user, String permissions, String rw) throws RemoteException;
 
     public void unregister(String username) throws RemoteException;
+    
+    public boolean modifyFile(String username, String filename, String attribute, String modification) throws RemoteException;
 }

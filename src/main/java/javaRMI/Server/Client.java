@@ -26,25 +26,29 @@ import java.util.Scanner;
 public class Client {
 
     private static final Scanner input = new Scanner(System.in);
+    private static String user = null;
+    private static boolean loggedIn = false;
 
     public static void main(String[] args) throws NotBoundException, RemoteException {
 
-        boolean session = true;
-        boolean loggedIn = false;
         MessageInterface stub = establishConnection();
-
-        System.out.println(stub.sayHello());
 
         do {
             credentials(stub);
-            loggedIn = true;
             while (loggedIn) {
                 System.out.println("Enter command: ('help' for list of commands)");
                 String command = input.nextLine().toLowerCase();
                 String[] filename = command.split("\\s+");
                 switch (filename[0]) {
+                    case "unregister": {
+                        stub.unregister(user);
+                        loggedIn = false;
+                        System.out.println("You have been deregistered.\n");
+                        break;
+                    }
                     case "help": {
-                        System.out.println("upload <file> <public/private> <read/write>\nquit\nlist\nlogout");
+                        System.out.println("\nList of commands:\nupload <file> <public/private> <read/write>\n"
+                                + "modify <filename> <attribute> <new modification>\nquit\nlist\nlogout\nunregister\n");
                         break;
                     }
                     case "quit": {
@@ -59,7 +63,16 @@ public class Client {
                         System.out.println("Logging out.");
                         loggedIn = false;
                         break;
-
+                    }
+                    case "modify": {
+                        if (filename.length == 4) {
+                            if (stub.modifyFile(user, filename[1], filename[2], filename[3])) {
+                                System.out.println(filename[1] + " has been modified.");
+                                break;
+                            }
+                        }
+                        System.out.println("Invalid or unauthorized command, try again.");
+                        break;
                     }
                     case "upload": {
                         if (insertFile(filename, stub)) {
@@ -67,21 +80,19 @@ public class Client {
                         }
                     }
                     default: {
-                        System.out.println("Invalid command. Try again.");
+                        System.out.println("Invalid command, try again.");
                         break;
                     }
-
                 }
-
             }
-        } while (session);
+        } while (true);
     }
 
     private static boolean insertFile(String[] filename, MessageInterface stub) throws RemoteException {
         if (filename.length == 4) {
             if ((filename[2].equals("public") || filename[2].equals("private"))
                     && (filename[3].equals("read") || filename[3].equals("write"))) {
-                if (stub.insertFile(filename[1], "me", filename[2], filename[3])) {
+                if (stub.insertFile(filename[1], user, filename[2], filename[3])) {
                     System.out.println("File added.");
                     return true;
                 }
@@ -94,10 +105,7 @@ public class Client {
         ArrayList<String[]> temp = stub.list();
         for (int i = 0; i < temp.size(); i++) {
             String[] list = temp.get(i);
-            System.out.print("File " + (i + 1) + ": ");
-            for (int j = 0; j < list.length; j++) {
-                System.out.print(" " + list[j]);
-            }
+            System.out.printf("FILE: %-20sOWNER:%-20sPUBLIC/PRIVATE: %-20sREAD/WRITE: %s", list[0], list[1], list[2], list[3]);
             System.out.println();
         }
     }
@@ -109,10 +117,21 @@ public class Client {
     }
 
     private static void credentials(MessageInterface stub) throws RemoteException {
-        System.out.print("\nEnter username: ");
+        System.out.println(stub.sayHello());
+        System.out.print("\nEnter username('quit' to exit): ");
         String username = input.nextLine().toLowerCase();
+        if (username.equals("quit")) {
+            System.out.println("Shutting down...");
+            System.exit(0);
+        }
         System.out.print("\nEnter password: ");
         String password = input.nextLine().toLowerCase();
-        System.out.println("\n" + stub.credentials(username, password) + "\n");
+        String answer = stub.credentials(username, password);
+        System.out.println("\n" + answer + "\n");
+        if (answer.equals("Your password was incorrect! Try again!")) {
+            return;
+        }
+        user = username;
+        loggedIn = true;
     }
 }

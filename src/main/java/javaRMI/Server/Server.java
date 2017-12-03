@@ -29,20 +29,69 @@ public class Server extends UnicastRemoteObject implements MessageInterface {
     public Server() throws RemoteException {
         super();
     }
-    
+
     @Override
-    public void unregister(String username){
+    public boolean modifyFile(String username, String filename, String attribute, String modification) {
+        ArrayList<String[]> bigList = list();
+        for (int i = 0; i < bigList.size(); i++) {
+            String[] list = bigList.get(i);
+            System.out.println( " " + list[0] + " " + list[1] + " " + list[2] + " " + list[3]);
+            if (filename.equals(list[0]) && !(list[1].equals(username))) {
+                if (list[2].equals("private") && !(list[1].equals(username))) {
+                    return false;
+                }
+                if (list[2].equals("public") && list[3].equals("read")) {
+                    return false;
+                }
+            }
+        }
+        switch (attribute) {
+            case "filename": {
+                DB.modifyFile(filename, attribute, modification);
+                return true;
+            }
+            case "permission": {
+                switch (modification) {
+                    case "public": {
+                        DB.modifyFile(filename, attribute, modification);
+                        return true;
+                    }
+                    case "private": {
+                        DB.modifyFile(filename, attribute, modification);
+                        return true;
+                    }
+                }
+            }
+            case "readwrite": {
+                switch (modification) {
+                    case "read": {
+                        DB.modifyFile(filename, attribute, modification);
+                        return true;
+                    }
+                    case "write": {
+                        DB.modifyFile(filename, attribute, modification);
+                        return true;
+                    }
+                }
+            }
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void unregister(String username) {
         DB.unregister(username);
     }
-    
+
     @Override
-    public boolean insertFile(String filename, String user, String permissions, String rw){
+    public boolean insertFile(String filename, String user, String permissions, String rw) {
         return DB.insertFile(filename, user, permissions, rw);
     }
 
     @Override
     public ArrayList<String[]> list() {
-       return DB.getFilelist();   
+        return DB.getFilelist();
     }
 
     @Override

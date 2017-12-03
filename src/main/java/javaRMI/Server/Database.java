@@ -16,7 +16,6 @@
  */
 package javaRMI.Server;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -25,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Database {
 
@@ -143,7 +144,7 @@ public class Database {
     public boolean insertFile(String filename, String user, String permissions, String rw) {
         String sql = "INSERT INTO files (filename, owner, permission, readwrite) VALUES (?, ?, ?, ?)";
         String sqlCheck = "SELECT owner FROM files";
-        
+
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sqlCheck);
@@ -164,5 +165,32 @@ public class Database {
             ex.printStackTrace();
         }
         return true;
+    }
+
+    public void unregister(String username) {
+        String sql = "DELETE FROM accounts WHERE username = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, username);
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void modifyFile(String filename, String attribute, String modification) {
+        String sql = "UPDATE files SET " + attribute + " = ? WHERE filename = ?";
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, modification);
+            stmt.setString(2, filename);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
     }
 }
