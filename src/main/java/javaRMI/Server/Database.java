@@ -24,14 +24,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
 
     private static final String TABLE_NAME = "accounts";
     private static final String TABLE_FILENAME = "files";
     private static Connection connection;
+
 
     public Database() {
         try {

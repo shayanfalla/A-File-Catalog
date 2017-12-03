@@ -16,23 +16,14 @@
  */
 package javaRMI.Server;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
-public class Server {
-
-    public static void main(String args[]) throws RemoteException {
-        try {
-            //Bind the remote object to the registry
-            LocateRegistry.createRegistry(1099);
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind("HelloServer", new ClientHandler());
-            System.err.println("Server ready");
-        } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
-            e.printStackTrace();
-        }
-    }
-
+/**
+ *
+ * @author Shayan Fallahian, shayanf@kth.se
+ */
+public interface ClientInterface extends Remote {
+    
+    public void recvMsg(String msg) throws RemoteException;
 }

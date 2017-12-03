@@ -14,23 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package javaRMI.Server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface MessageInterface extends Remote{
+public interface ServerInterface extends Remote {
+
     public String sayHello() throws RemoteException;
-    
+
     public String credentials(String username, String password) throws RemoteException;
-    
+
     public ArrayList<String[]> list() throws RemoteException;
-    
+
     public boolean insertFile(String filename, String user, String permissions, String rw) throws RemoteException;
 
     public void unregister(String username) throws RemoteException;
+
+    public void storeClient(ClientInterface remoteNode) throws RemoteException;
+
+    public void removeClient(ClientInterface remoteNode) throws RemoteException;
     
     public boolean modifyFile(String username, String filename, String attribute, String modification) throws RemoteException;
 }
