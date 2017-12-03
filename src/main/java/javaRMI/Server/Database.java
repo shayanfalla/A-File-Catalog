@@ -1,10 +1,22 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 Shayan Fallahian shayanf@kth.se
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package javaRMI.Server;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -12,13 +24,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 public class Database {
 
     private static final String TABLE_NAME = "accounts";
-    private static final String TABLE_FILENAME = "filename";
+    private static final String TABLE_FILENAME = "files";
     private static Connection connection;
 
     public Database() {
@@ -75,9 +86,25 @@ public class Database {
         return false;
     }
 
+    public boolean checkPass(String username, String password) {
+        String sql = "SELECT * FROM accounts";
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                if (username.equals(rs.getString("username")) && password.equals(rs.getString("password"))) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     public void insertUser(String username, String password) {
         String sql = "INSERT INTO accounts (username, password) VALUES (?, ?)";
-       // String query = "INSERT INTO Users (user_id,username,firstname,lastname, companyname, email_addr, want_privacy ) VALUES (null, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -88,5 +115,54 @@ public class Database {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<String[]> getFilelist() {
+        String sql = "SELECT * FROM files";
+
+        Statement stmt;
+        ResultSet rs;
+        ArrayList<String[]> bigList = new ArrayList<String[]>();
+
+        try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String[] temp = new String[4];
+                for (int i = 0; i < temp.length; i++) {
+                    temp[i] = rs.getString(i + 1);
+                }
+                bigList.add(temp);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return bigList;
+    }
+
+    public boolean insertFile(String filename, String user, String permissions, String rw) {
+        String sql = "INSERT INTO files (filename, owner, permission, readwrite) VALUES (?, ?, ?, ?)";
+        String sqlCheck = "SELECT owner FROM files";
+        
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlCheck);
+            while (rs.next()) {
+                if (filename.equals(rs.getString(1))) {
+                    return false;
+                }
+            }
+
+            PreparedStatement st = connection.prepareCall(sql);
+            st.setString(1, filename);
+            st.setString(2, user);
+            st.setString(3, permissions);
+            st.setString(4, rw);
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
 }

@@ -1,3 +1,6 @@
+
+import java.util.Scanner;
+
 /*
  * Copyright (C) 2017 Shayan Fallahian shayanf@kth.se
  *
@@ -15,20 +18,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package javaRMI.Server;
+/**
+ *
+ * @author Shayan Fallahian, shayanf@kth.se
+ */
+public class test {
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+       Scanner hey = new Scanner(System.in);
+        String command = hey.nextLine().toLowerCase();
+        String[] filename = command.split("\\s+");
+        String temp = "hey what is up";
+        String[] text = temp.split("\\s+");
+        System.out.println(text[2]);
+        System.out.println(filename[0]);
+        System.out.println(filename[1]);
+    }
 
-public interface MessageInterface extends Remote{
-    public String sayHello() throws RemoteException;
-    
-    public String credentials(String username, String password) throws RemoteException;
-    
-    public ArrayList<String[]> list() throws RemoteException;
-    
-    public boolean insertFile(String filename, String user, String permissions, String rw) throws RemoteException;
-
-    public void unregister(String username) throws RemoteException;
 }
